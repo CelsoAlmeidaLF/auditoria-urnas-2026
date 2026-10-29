@@ -2,23 +2,24 @@
  * Ponto de entrada: monta o shell comum, o serviço de auditoria e as telas.
  * Endereço compartilhável de uma seção do TSE: #secao=<pleito>/<UF>/<município>/<zona>/<seção>
  */
-import { StkGovShell, renderStkIcons } from '../vendor/stk-gov/stk-gov-shell.js?v=20261029-1755';
-import { StkGovPwa } from '../vendor/stk-gov/stk-gov-pwa.js?v=20261029-1755';
-import { AuditoriaService } from './application/AuditoriaService.js?v=20261029-1755';
-import { TseResultadosGateway, PLEITOS } from './infrastructure/TseResultadosGateway.js?v=20261029-1755';
-import { ICONES } from './ui/Icones.js?v=20261029-1755';
-import { UrnaView } from './ui/UrnaView.js?v=20261029-1755';
-import { EventosView } from './ui/EventosView.js?v=20261029-1755';
-import { PacoteView } from './ui/PacoteView.js?v=20261029-1755';
-import { PanoramaView } from './ui/PanoramaView.js?v=20261029-1755';
-import { renderComoLer } from './ui/ComoLerView.js?v=20261029-1755';
-import { LocaisView } from './ui/LocaisView.js?v=20261029-1755';
-import { SeletorSecao } from './ui/SeletorSecao.js?v=20261029-1755';
-import { LocaisGateway } from './infrastructure/LocaisGateway.js?v=20261029-1755';
-import { PainelGateway, PAINEL_URL } from './infrastructure/PainelGateway.js?v=20261029-1755';
-import { relatorioUrna, relatorioLocais, relatorioPanorama, imprimir } from './ui/Relatorios.js?v=20261029-1755';
-import { gerarXlsx, baixarArquivo } from './infrastructure/XlsxWriter.js?v=20261029-1755';
-import { esc, nomeDaSecao, semZeros } from './ui/Formato.js?v=20261029-1755';
+import { StkGovShell, renderStkIcons } from '../vendor/stk-gov/stk-gov-shell.js?v=20261029-1825';
+import { StkGovPwa } from '../vendor/stk-gov/stk-gov-pwa.js?v=20261029-1825';
+import { AuditoriaService } from './application/AuditoriaService.js?v=20261029-1825';
+import { TseResultadosGateway, PLEITOS } from './infrastructure/TseResultadosGateway.js?v=20261029-1825';
+import { ICONES } from './ui/Icones.js?v=20261029-1825';
+import { observarTabelas } from './ui/TabelasResponsivas.js?v=20261029-1825';
+import { UrnaView } from './ui/UrnaView.js?v=20261029-1825';
+import { EventosView } from './ui/EventosView.js?v=20261029-1825';
+import { PacoteView } from './ui/PacoteView.js?v=20261029-1825';
+import { PanoramaView } from './ui/PanoramaView.js?v=20261029-1825';
+import { renderComoLer } from './ui/ComoLerView.js?v=20261029-1825';
+import { LocaisView } from './ui/LocaisView.js?v=20261029-1825';
+import { SeletorSecao } from './ui/SeletorSecao.js?v=20261029-1825';
+import { LocaisGateway } from './infrastructure/LocaisGateway.js?v=20261029-1825';
+import { PainelGateway, PAINEL_URL } from './infrastructure/PainelGateway.js?v=20261029-1825';
+import { relatorioUrna, relatorioLocais, relatorioPanorama, imprimir } from './ui/Relatorios.js?v=20261029-1825';
+import { gerarXlsx, baixarArquivo } from './infrastructure/XlsxWriter.js?v=20261029-1825';
+import { esc, nomeDaSecao, semZeros } from './ui/Formato.js?v=20261029-1825';
 
 const $ = id => document.getElementById(id);
 
@@ -38,6 +39,8 @@ class App {
     this.analise = null;
 
     renderStkIcons(ICONES);
+    // No celular, cada linha de tabela vira um cartão com "coluna: valor"
+    observarTabelas();
     this.shell = new StkGovShell({ app: 'urnas' });
     this.shell.iniciar();
     const pwa = new StkGovPwa('sw.js');

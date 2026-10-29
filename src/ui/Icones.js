@@ -1,4 +1,4 @@
-import { SHELL_ICONS } from '../../vendor/stk-gov/stk-gov-shell.js?v=20261029-1755';
+import { SHELL_ICONS } from '../../vendor/stk-gov/stk-gov-shell.js?v=20261029-1825';
 /** Ícones do app (padrão Lucide, traço 1.8 aplicado pelo CSS, currentColor). Os do shell vêm de stk-gov-shell.js. */
 export const ICONES = Object.freeze({
   chartBar: '<svg viewBox="0 0 24 24"><path d="M3 3v16a2 2 0 0 0 2 2h16"></path><path d="M7 16h8"></path><path d="M7 11h12"></path><path d="M7 6h3"></path></svg>',

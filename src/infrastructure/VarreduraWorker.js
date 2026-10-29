@@ -2,8 +2,8 @@
  * Worker que resume todas as urnas de um pacote da UF sem travar a tela.
  * Recebe { arquivo: File }, devolve { tipo: 'progresso' | 'fim' | 'erro', ... }. Aceita { tipo: 'cancelar' }.
  */
-import { ZipLeitor } from './ZipLeitor.js?v=20261029-1755';
-import { identificarNome, resumirUrna } from '../application/AuditoriaService.js?v=20261029-1755';
+import { ZipLeitor } from './ZipLeitor.js?v=20261029-1825';
+import { identificarNome, resumirUrna } from '../application/AuditoriaService.js?v=20261029-1825';
 
 let cancelado = false;
 

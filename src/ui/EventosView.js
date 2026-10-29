@@ -2,8 +2,8 @@
  * Aba "Eventos do log": as linhas do logd.dat com busca, filtros e exportação em CSV.
  * Mostra 300 linhas por vez (um dia de votação tem milhares).
  */
-import { esc } from './Formato.js?v=20261029-1755';
-import { MARCOS, horaDeBrasilia, diasDoLog } from '../domain/LogUrna.js?v=20261029-1755';
+import { esc } from './Formato.js?v=20261029-1825';
+import { MARCOS, horaDeBrasilia, diasDoLog } from '../domain/LogUrna.js?v=20261029-1825';
 
 const PAGINA = 300;
 

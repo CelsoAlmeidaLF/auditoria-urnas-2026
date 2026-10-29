@@ -5,9 +5,9 @@
  * Organização: números do país → tabelas por estado (um tema por vez) → gráficos e faixas →
  * alertas e erros mais frequentes → lista de urnas para olhar ou trocadas.
  */
-import { icone } from './Icones.js?v=20261029-1755';
-import { esc, br, duracao, semZeros } from './Formato.js?v=20261029-1755';
-import { horaDeBrasilia, localDaUrna } from '../domain/LogUrna.js?v=20261029-1755';
+import { icone } from './Icones.js?v=20261029-1825';
+import { esc, br, duracao, semZeros } from './Formato.js?v=20261029-1825';
+import { horaDeBrasilia, localDaUrna } from '../domain/LogUrna.js?v=20261029-1825';
 
 const NOMES_UF = {
   AC: 'Acre', AL: 'Alagoas', AM: 'Amazonas', AP: 'Amapá', BA: 'Bahia', CE: 'Ceará', DF: 'Distrito Federal', ES: 'Espírito Santo',

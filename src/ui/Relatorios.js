@@ -3,9 +3,9 @@
  * Três assuntos: uma urna, os locais/urnas de um filtro (zona, município) e o Panorama do Brasil.
  * Cada função devolve { titulo, html, abas } — html para o PDF, abas para o Excel.
  */
-import { esc, br, nomeDaSecao, titulo as tituloDe } from './Formato.js?v=20261029-1755';
-import { horaDeBrasilia } from '../domain/LogUrna.js?v=20261029-1755';
-import { somarRdv } from '../domain/Rdv.js?v=20261029-1755';
+import { esc, br, nomeDaSecao, titulo as tituloDe } from './Formato.js?v=20261029-1825';
+import { horaDeBrasilia } from '../domain/LogUrna.js?v=20261029-1825';
+import { somarRdv } from '../domain/Rdv.js?v=20261029-1825';
 
 const agora = () => new Date().toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
 const ROTULO = { ok: 'confere', atencao: 'olhe no log', info: 'informação' };

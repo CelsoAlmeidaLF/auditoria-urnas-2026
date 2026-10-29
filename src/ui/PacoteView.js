@@ -2,9 +2,9 @@
  * Aba "Urnas de uma UF": confere todas as urnas de um pacote do TSE num Worker (a tela não trava)
  * e lista as urnas, com as que pedem um olhar primeiro.
  */
-import { icone } from './Icones.js?v=20261029-1755';
-import { esc, br, duracao, semZeros } from './Formato.js?v=20261029-1755';
-import { horaDeBrasilia, localDaUrna } from '../domain/LogUrna.js?v=20261029-1755';
+import { icone } from './Icones.js?v=20261029-1825';
+import { esc, br, duracao, semZeros } from './Formato.js?v=20261029-1825';
+import { horaDeBrasilia, localDaUrna } from '../domain/LogUrna.js?v=20261029-1825';
 
 const TITULOS_ATENCAO = {
   habilitacao: 'voto sem eleitor habilitado', janela: 'voto fora do horário', abertura: 'abertura antes das 8h',
@@ -53,7 +53,7 @@ export class PacoteView {
     this.worker?.terminate();
     this.resumos.clear();
     this.progresso = { feitas: 0, total: pacote.urnas, nome: pacote.nome, rodando: true, inicio: performance.now() };
-    this.worker = new Worker(new URL('../infrastructure/VarreduraWorker.js?v=20261029-1755', import.meta.url), { type: 'module' });
+    this.worker = new Worker(new URL('../infrastructure/VarreduraWorker.js?v=20261029-1825', import.meta.url), { type: 'module' });
     this.worker.addEventListener('message', ({ data }) => {
       if (data.tipo === 'progresso') {
         for (const r of data.resumos) this.resumos.set(r.chave, r);

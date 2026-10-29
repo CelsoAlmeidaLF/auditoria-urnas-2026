@@ -328,7 +328,6 @@ a.sidebar-nav-item { text-decoration: none; color: inherit; display: flex; }
   .tabela-eventos td { padding: 0; border: 0; }
   .tabela-eventos td:nth-child(1) { display: none; }
   .tabela-eventos td:nth-child(5) { grid-column: 1 / -1; }
-  .tabela-urnas .ocultar-celular { display: none; }
   .guia dl { grid-template-columns: 1fr; }
   .guia dd { margin-bottom: 6px; }
 }
@@ -352,4 +351,60 @@ a.sidebar-nav-item { text-decoration: none; color: inherit; display: flex; }
   .relatorio th, .relatorio td { border: 0.5pt solid #bbb; padding: 3pt 5pt; text-align: left; vertical-align: top; color: #111; }
   .relatorio th { background: #eef5f0; font-weight: 700; }
   .relatorio footer { margin-top: 14pt; padding-top: 6pt; border-top: 0.5pt solid #bbb; font-size: 8pt; color: #555; }
+}
+
+/* ───────── 12. TABELAS EM CARTÕES NO CELULAR ─────────
+   Cada linha vira um cartão: a 1ª coluna é o título e as demais aparecem uma por linha,
+   com o nome da coluna à esquerda (data-label, posto por TabelasResponsivas.js) e o valor à direita. */
+@media (max-width: 639px) {
+  .tabela-wrap:has(> .tabela-urnas) { overflow: visible; border: 0; border-radius: 0; background: transparent; }
+  .tabela-urnas, .tabela-urnas tbody, .tabela-urnas tfoot { display: block; width: 100%; }
+  .tabela-urnas thead { display: none; }
+  .tabela-urnas tr {
+    display: block;
+    margin-bottom: var(--m3-spacing-2);
+    padding: 4px var(--m3-spacing-4) var(--m3-spacing-2);
+    background: var(--surface-inset);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+  }
+  .tabela-urnas tr:last-child { margin-bottom: 0; }
+  .tabela-urnas tbody tr:hover td { background: transparent; }
+  .tabela-urnas tr.selecionada { border-color: var(--border-accent); background: rgba(61, 214, 140, 0.08); }
+  .tabela-urnas tr.selecionada td { background: transparent; }
+  .tabela-urnas td, .tabela-urnas td.num {
+    display: grid;
+    grid-template-columns: minmax(0, 45%) minmax(0, 1fr);
+    gap: var(--m3-spacing-3);
+    align-items: baseline;
+    padding: 6px 0;
+    border: 0;
+    border-top: 1px solid var(--border-subtle);
+    text-align: right;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+  .tabela-urnas td::before {
+    content: attr(data-label);
+    text-align: left;
+    font-family: var(--sans);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-tertiary);
+  }
+  .tabela-urnas .valor-celula { min-width: 0; justify-self: end; display: inline-flex; flex-wrap: wrap; justify-content: flex-end; align-items: baseline; gap: 4px 6px; text-align: right; }
+  /* Título do cartão: a 1ª coluna, sem rótulo e sem linha acima */
+  .tabela-urnas td:first-child .valor-celula { justify-content: flex-start; text-align: left; }
+  .tabela-urnas td:first-child { display: block; padding: 8px 0 6px; border-top: 0; text-align: left; font-weight: 600; font-size: 0.875rem; color: var(--text-primary); }
+  .tabela-urnas td:first-child::before { content: none; }
+  /* Células sem nome de coluna (ex.: "em conferência", tabelas sem cabeçalho) ocupam a linha inteira */
+  .tabela-urnas td:not([data-label]):not(:first-child) { display: block; text-align: left; }
+  .tabela-urnas td:not([data-label])::before { content: none; }
+  /* Linha de totais (Brasil) em destaque */
+  .tabela-urnas tfoot tr { background: var(--surface-elevated); border-color: var(--border-default); }
+  .tabela-urnas tfoot td { background: transparent; font-weight: 600; }
+  /* Tabelas de duas colunas sem cabeçalho (conta oficial): rótulo à esquerda, número à direita */
+  .tabela-urnas:not(:has(thead)) tr { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--m3-spacing-3); align-items: baseline; padding: var(--m3-spacing-3) var(--m3-spacing-4); }
+  .tabela-urnas:not(:has(thead)) td, .tabela-urnas:not(:has(thead)) td:first-child { display: block; padding: 0; border: 0; font-size: 0.8125rem; }
+  .tabela-urnas:not(:has(thead)) td:first-child { font-weight: 400; color: var(--text-secondary); }
 }

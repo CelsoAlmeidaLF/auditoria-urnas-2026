@@ -9,7 +9,7 @@
  *   tipos 4, 6 e 7 = nulo (4 traz o que o eleitor digitou; 6 e 7 são outras formas de nulo, somadas como nulo no boletim)
  * Conferido com o boletim (bu.dat): todas as urnas de Roraima no 2º turno e seções do 1º turno (6 cargos).
  */
-import { lerDer } from './BuDat.js?v=20261029-1755';
+import { lerDer } from './BuDat.js?v=20261029-1825';
 
 const CARGOS = { 1: 'PRESIDENTE', 3: 'GOVERNADOR', 5: 'SENADOR', 6: 'DEPUTADO FEDERAL', 7: 'DEPUTADO ESTADUAL', 8: 'DEPUTADO DISTRITAL', 11: 'PREFEITO', 13: 'VEREADOR' };
 export const TIPO_VOTO = { 1: 'legenda', 2: 'nominal', 3: 'branco', 4: 'nulo', 6: 'nulo', 7: 'nulo' };
