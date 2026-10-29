@@ -2,12 +2,12 @@
  * Aba "Locais e zonas": endereço de cada local de votação (rua, número, bairro, CEP, mapa) e o que tinha no log
  * de cada urna do local ou da zona inteira (baixado do TSE na hora, analisado no aparelho).
  */
-import { icone } from './Icones.js?v=20261029-1725';
-import { esc, br, duracao, titulo } from './Formato.js?v=20261029-1725';
-import { horaDeBrasilia } from '../domain/LogUrna.js?v=20261029-1725';
-import { linkDoMapa } from '../domain/Endereco.js?v=20261029-1725';
-import { UFS } from '../infrastructure/TseResultadosGateway.js?v=20261029-1725';
-import { resumoTurno } from '../infrastructure/PainelGateway.js?v=20261029-1725';
+import { icone } from './Icones.js?v=20261029-1755';
+import { esc, br, duracao, titulo } from './Formato.js?v=20261029-1755';
+import { horaDeBrasilia } from '../domain/LogUrna.js?v=20261029-1755';
+import { linkDoMapa } from '../domain/Endereco.js?v=20261029-1755';
+import { UFS } from '../infrastructure/TseResultadosGateway.js?v=20261029-1755';
+import { resumoTurno } from '../infrastructure/PainelGateway.js?v=20261029-1755';
 
 const PAGINA = 100;
 const SIMULTANEOS = 4;
@@ -16,7 +16,7 @@ const LIMITE_LOTE = 800;
 export class LocaisView {
   /**
    * @param {HTMLElement} raiz
-   * @param {import('../infrastructure/LocaisGateway.js?v=20261029-1725').LocaisGateway} locais
+   * @param {import('../infrastructure/LocaisGateway.js?v=20261029-1755').LocaisGateway} locais
    * @param {{ detalhar: (s: object) => Promise<object>, abrirUrna: (chave: string) => void, avisar: (m: string) => void, pleito: string }} acoes
    */
   constructor(raiz, locais, acoes) {

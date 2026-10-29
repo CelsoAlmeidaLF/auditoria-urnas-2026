@@ -38,6 +38,8 @@ export class StkGovShell {
   }
 
   iniciar() {
+    // Folhas da barra inferior (celular): montadas antes das abas, porque podem copiar itens de aba
+    this._montarFolhas();
     // Recolhida no desktop: lembra a escolha de cada pessoa
     if (this.sidebar && this._ler(this.chaveRecolhida) === 'true') this.sidebar.classList.add('sidebar-collapsed');
 
@@ -45,7 +47,7 @@ export class StkGovShell {
     this.btnClose?.addEventListener('click', () => this.fecharGaveta());
     this.backdrop?.addEventListener('click', () => this.fecharGaveta());
     this.doc.addEventListener('keydown', e => {
-      if (e.key === 'Escape') { this.fecharGaveta(); this.fecharMenus(); }
+      if (e.key === 'Escape') { this.fecharGaveta(); this.fecharMenus(); this.fecharFolhas(); }
     });
     this.gaveta.addEventListener('change', () => { this.fecharGaveta(false); this._sincronizar(); });
 
@@ -63,7 +65,7 @@ export class StkGovShell {
       });
       menu.querySelectorAll('.action-menu-item').forEach(item => item.addEventListener('click', () => this.fecharMenus()));
     });
-    this.doc.addEventListener('click', () => this.fecharMenus());
+    this.doc.addEventListener('click', () => { this.fecharMenus(); this.fecharFolhas(); });
 
     this._sincronizar();
   }
@@ -117,6 +119,55 @@ export class StkGovShell {
     this.doc.body.classList.remove('stk-drawer-open');
     this._sincronizar();
     if (devolverFoco && this.gaveta.matches) this.btnToggle?.focus();
+  }
+
+  /**
+   * Folha da barra inferior (celular): menu que sobe acima da barra com itens que não cabem nela.
+   *   <button class="bottom-nav-item" data-folha="idDaFolha">…</button>
+   *   <div class="stk-folha" id="idDaFolha" data-copiar-de="seletor CSS">título e itens</div>
+   * data-copiar-de copia itens do menu lateral (links ou botões de aba), sem repetir HTML.
+   */
+  _montarFolhas() {
+    this.doc.querySelectorAll('.stk-folha[data-copiar-de]').forEach(folha => {
+      for (const item of this.doc.querySelectorAll(folha.dataset.copiarDe)) {
+        const copia = item.cloneNode(true);
+        copia.removeAttribute('id');
+        copia.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+        copia.classList.remove('sidebar-nav-item', 'active');
+        copia.classList.add('stk-folha-item');
+        copia.removeAttribute('role');
+        copia.removeAttribute('aria-selected');
+        copia.removeAttribute('aria-controls');
+        copia.removeAttribute('tabindex');
+        folha.appendChild(copia);
+      }
+    });
+    this.doc.querySelectorAll('[data-folha]').forEach(botao => {
+      const folha = this.doc.getElementById(botao.dataset.folha);
+      if (!folha) return;
+      botao.setAttribute('aria-haspopup', 'menu');
+      botao.setAttribute('aria-expanded', 'false');
+      botao.setAttribute('aria-controls', folha.id);
+      botao.addEventListener('click', e => {
+        e.stopPropagation();
+        const abrir = !folha.classList.contains('aberta');
+        this.fecharFolhas();
+        if (abrir) {
+          folha.classList.add('aberta');
+          botao.setAttribute('aria-expanded', 'true');
+          folha.querySelector('a, button')?.focus();
+        }
+      });
+      folha.addEventListener('click', e => {
+        if (e.target.closest('a, button')) this.fecharFolhas();
+        else e.stopPropagation();
+      });
+    });
+  }
+
+  fecharFolhas() {
+    this.doc.querySelectorAll('.stk-folha.aberta').forEach(f => f.classList.remove('aberta'));
+    this.doc.querySelectorAll('[data-folha][aria-expanded="true"]').forEach(b => b.setAttribute('aria-expanded', 'false'));
   }
 
   fecharMenus() {

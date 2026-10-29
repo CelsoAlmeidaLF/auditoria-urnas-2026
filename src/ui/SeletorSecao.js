@@ -2,13 +2,13 @@
  * Seletores encadeados turno → estado → município → zona → seção, com a lista oficial de seções do TSE.
  * Usado na aba Abrir urna e na aba Eventos.
  */
-import { esc, semZeros, titulo } from './Formato.js?v=20261029-1725';
-import { PLEITOS, UFS } from '../infrastructure/TseResultadosGateway.js?v=20261029-1725';
+import { esc, semZeros, titulo } from './Formato.js?v=20261029-1755';
+import { PLEITOS, UFS } from '../infrastructure/TseResultadosGateway.js?v=20261029-1755';
 
 export class SeletorSecao {
   /**
    * @param {{ pleito: HTMLSelectElement, uf: HTMLSelectElement, municipio: HTMLSelectElement, zona: HTMLSelectElement, secao: HTMLSelectElement, botao: HTMLButtonElement, status: HTMLElement, form: HTMLFormElement }} el
-   * @param {import('../infrastructure/TseResultadosGateway.js?v=20261029-1725').TseResultadosGateway} tse
+   * @param {import('../infrastructure/TseResultadosGateway.js?v=20261029-1755').TseResultadosGateway} tse
    * @param {(pleito: string, secao: {uf: string, municipio: string, zona: string, secao: string, nomeMunicipio: string}) => Promise<void>} aoEscolher
    */
   constructor(el, tse, aoEscolher) {

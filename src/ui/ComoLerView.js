@@ -1,5 +1,5 @@
 /** Aba "Como ler o log": guia em linguagem simples, com os limites do que o log mostra. */
-import { icone } from './Icones.js?v=20261029-1725';
+import { icone } from './Icones.js?v=20261029-1755';
 
 export function renderComoLer(raiz) {
   raiz.innerHTML = `

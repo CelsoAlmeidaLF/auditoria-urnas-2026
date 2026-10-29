@@ -3,15 +3,15 @@
  * Cada verificação diz o que foi conferido, o resultado e se está "ok", pede "atencao" ou é só "info".
  * "atencao" não quer dizer fraude: quer dizer "abra o log nesse ponto e veja o que aconteceu".
  */
-import { LIMITE_RAJADA_SEG, horaDeBrasilia } from './LogUrna.js?v=20261029-1725';
-import { conferirComBoletim } from './Rdv.js?v=20261029-1725';
+import { LIMITE_RAJADA_SEG, horaDeBrasilia } from './LogUrna.js?v=20261029-1755';
+import { conferirComBoletim } from './Rdv.js?v=20261029-1755';
 
 const br = n => (n ?? 0).toLocaleString('pt-BR');
 const seg = s => (s == null ? '—' : s < 120 ? `${s} s` : `${Math.floor(s / 60)} min ${s % 60} s`);
 
 /**
- * @param {ReturnType<import('./LogUrna.js?v=20261029-1725').analisarDia>} dia
- * @param {{ boletim?: ReturnType<import('./BoletimUrna.js?v=20261029-1725').lerBoletim>, original?: ReturnType<import('./LogUrna.js?v=20261029-1725').analisarDia> }} [extra]
+ * @param {ReturnType<import('./LogUrna.js?v=20261029-1755').analisarDia>} dia
+ * @param {{ boletim?: ReturnType<import('./BoletimUrna.js?v=20261029-1755').lerBoletim>, original?: ReturnType<import('./LogUrna.js?v=20261029-1755').analisarDia> }} [extra]
  */
 export function verificar(dia, { boletim = null, original = null, rdv = null } = {}) {
   const v = [];

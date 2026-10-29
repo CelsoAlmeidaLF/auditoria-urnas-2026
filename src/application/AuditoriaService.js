@@ -3,13 +3,13 @@
  * montar o catálogo de urnas, analisar uma urna e resumir todas as urnas de um pacote.
  * Tudo acontece no aparelho: nenhum arquivo é enviado para lugar nenhum.
  */
-import { ZipLeitor, textoLatin1 } from '../infrastructure/ZipLeitor.js?v=20261029-1725';
-import { lerLog, diasDoLog, diaDaEleicao, analisarDia, juntarAnalises, localDaUrna } from '../domain/LogUrna.js?v=20261029-1725';
-import { lerBoletim } from '../domain/BoletimUrna.js?v=20261029-1725';
-import { lerBuDat } from '../domain/BuDat.js?v=20261029-1725';
-import { lerRdv } from '../domain/Rdv.js?v=20261029-1725';
-import { verificar } from '../domain/Verificacoes.js?v=20261029-1725';
-import { metricasDoDia, somarMetricas } from '../domain/Metricas.js?v=20261029-1725';
+import { ZipLeitor, textoLatin1 } from '../infrastructure/ZipLeitor.js?v=20261029-1755';
+import { lerLog, diasDoLog, diaDaEleicao, analisarDia, juntarAnalises, localDaUrna } from '../domain/LogUrna.js?v=20261029-1755';
+import { lerBoletim } from '../domain/BoletimUrna.js?v=20261029-1755';
+import { lerBuDat } from '../domain/BuDat.js?v=20261029-1755';
+import { lerRdv } from '../domain/Rdv.js?v=20261029-1755';
+import { verificar } from '../domain/Verificacoes.js?v=20261029-1755';
+import { metricasDoDia, somarMetricas } from '../domain/Metricas.js?v=20261029-1755';
 
 /** o03221rr0300000040011-log.jez → pleito 3221, RR, município 03000, zona 0004, seção 0011 */
 const NOME_TSE = /o0?(\d{4})([a-z]{2})(\d{5})(\d{4})(\d{4})-(log\.jez|imgbu\.dat|bu\.dat|rdv\.dat|vota\.vsc)$/i;
@@ -148,7 +148,7 @@ export class AuditoriaService {
 
   /**
    * Baixa do site de resultados do TSE o log (e o boletim em texto, quando publicado) de uma seção.
-   * @param {import('../infrastructure/TseResultadosGateway.js?v=20261029-1725').TseResultadosGateway} tse
+   * @param {import('../infrastructure/TseResultadosGateway.js?v=20261029-1755').TseResultadosGateway} tse
    * @param {string} pleito @param {{uf: string, municipio: string, zona: string, secao: string}} secao
    */
   async abrirDoTse(tse, pleito, secao) {

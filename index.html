@@ -19,9 +19,9 @@
   <meta name="apple-mobile-web-app-title" content="Urnas">
 
   <!-- Design system comum dos projetos 8.X (cópia de _design-system/, não editar aqui) + estilos do conteúdo -->
-  <link rel="stylesheet" href="css/fonts.css?v=20261029-1725">
-  <link rel="stylesheet" href="vendor/stk-gov/stk-gov.css?v=20261029-1725">
-  <link rel="stylesheet" href="css/style.css?v=20261029-1725">
+  <link rel="stylesheet" href="css/fonts.css?v=20261029-1755">
+  <link rel="stylesheet" href="vendor/stk-gov/stk-gov.css?v=20261029-1755">
+  <link rel="stylesheet" href="css/style.css?v=20261029-1755">
 </head>
 
 <body>
@@ -397,17 +397,21 @@
     <button type="button" class="bottom-nav-item" data-tab="tabLocais">
       <span><span data-stk-icon="globe"></span></span><span class="bottom-nav-label">Locais</span>
     </button>
-    <button type="button" class="bottom-nav-item" data-tab="tabComoLer" hidden>
-      <span><span data-stk-icon="book"></span></span><span class="bottom-nav-label">Guia</span>
+    <!-- Celular: o que não cabe na barra (Urnas de uma UF, Como ler o log, Resultados das eleições) numa folha -->
+    <button type="button" class="bottom-nav-item" data-folha="folhaMais">
+      <span><span data-stk-icon="list"></span></span><span class="bottom-nav-label">Mais</span>
     </button>
   </nav>
+  <div class="stk-folha" id="folhaMais" role="menu" aria-label="Mais" data-copiar-de=".sidebar-nav-item[data-tab=tabPacote], .sidebar-nav-item[data-tab=tabComoLer], .sidebar-nav-extra a">
+    <div class="stk-folha-titulo">Mais</div>
+  </div>
 
   <div class="stk-toast" id="toastNotification" role="status" aria-live="polite">
     <div class="toast-icon" data-stk-icon="check"></div>
     <div id="toastMessage"></div>
   </div>
 
-  <script type="module" src="src/Program.js?v=20261029-1725"></script>
+  <script type="module" src="src/Program.js?v=20261029-1755"></script>
 </body>
 
 </html>

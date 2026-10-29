@@ -1,12 +1,12 @@
 /**
  * Aba "Resumo da urna": identificação, números do dia, verificações, votos por hora, linha do tempo e boletim.
  */
-import { icone } from './Icones.js?v=20261029-1725';
-import { esc, br, duracao, nomeDaSecao } from './Formato.js?v=20261029-1725';
-import { horaDeBrasilia } from '../domain/LogUrna.js?v=20261029-1725';
-import { linkDoMapa } from '../domain/Endereco.js?v=20261029-1725';
-import { somarRdv } from '../domain/Rdv.js?v=20261029-1725';
-import { resumoTurno } from '../infrastructure/PainelGateway.js?v=20261029-1725';
+import { icone } from './Icones.js?v=20261029-1755';
+import { esc, br, duracao, nomeDaSecao } from './Formato.js?v=20261029-1755';
+import { horaDeBrasilia } from '../domain/LogUrna.js?v=20261029-1755';
+import { linkDoMapa } from '../domain/Endereco.js?v=20261029-1755';
+import { somarRdv } from '../domain/Rdv.js?v=20261029-1755';
+import { resumoTurno } from '../infrastructure/PainelGateway.js?v=20261029-1755';
 
 const ICONE_STATUS = { ok: 'checkCircle', atencao: 'alert', info: 'info' };
 const ROTULO_STATUS = { ok: 'Confere', atencao: 'Olhe no log', info: 'Informação' };
@@ -27,7 +27,7 @@ export class UrnaView {
     });
   }
 
-  /** @param {Awaited<ReturnType<import('../application/AuditoriaService.js?v=20261029-1725').AuditoriaService['analisar']>>} r */
+  /** @param {Awaited<ReturnType<import('../application/AuditoriaService.js?v=20261029-1755').AuditoriaService['analisar']>>} r */
   render(r) {
     this.r = r;
     const { urna, analise: a, analiseOriginal: o, boletim, verificacoes, dias } = r;
