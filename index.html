@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#1C1C1C">
+  <meta name="description"
+    content="Abra e confira o log de qualquer urna eletrônica das eleições de 2026: votos por hora, intervalos, alertas e a comparação com o boletim de urna. Tudo no seu aparelho, direto dos arquivos do TSE.">
+  <title>Auditoria das Urnas</title>
+
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/app-icon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/app-icon-192.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Urnas">
+
+  <!-- Design system comum dos projetos 8.X (cópia de _design-system/, não editar aqui) + estilos do conteúdo -->
+  <link rel="stylesheet" href="css/fonts.css?v=20261029-1725">
+  <link rel="stylesheet" href="vendor/stk-gov/stk-gov.css?v=20261029-1725">
+  <link rel="stylesheet" href="css/style.css?v=20261029-1725">
+</head>
+
+<body>
+  <!-- Aviso de falha: estático para aparecer mesmo se os módulos JS não carregarem -->
+  <div id="appFatalError" class="app-fatal-error" role="alert" hidden>
+    <strong>Não foi possível carregar o app.</strong>
+    <p id="appFatalErrorDetail">Recarregue a página. Se continuar, abra o site por um servidor local (ex.:
+      <code>python3 -m http.server</code>).</p>
+  </div>
+
+  <!-- TOPO -->
+  <header class="app-topbar" id="appTopbar">
+    <div class="topbar-inner">
+      <div class="topbar-brand-section">
+        <button type="button" class="btn-hamburger" id="btnToggleSidebar" aria-controls="appSidebar"
+          aria-expanded="true" aria-label="Recolher menu" title="Recolher menu">
+          <span data-stk-icon="panelLeft"></span>
+        </button>
+        <div class="topbar-divider"></div>
+        <div class="topbar-brand">
+          <img class="app-logo" src="icons/app-icon-64.png" alt="" width="36" height="36">
+          <div class="min-w-0">
+            <div class="brand-title-row">
+              <h1 class="brand-heading">Auditoria das Urnas</h1>
+            </div>
+            <p class="brand-subtext">Systekna Governo • Logs e boletins das urnas de 2026</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="topbar-controls-section">
+        <div class="topbar-actions-wrap">
+          <button type="button" class="action-btn action-btn-secondary" id="btnInstallApp" title="Instalar como app"
+            hidden>
+            <span data-stk-icon="download"></span>
+            <span class="action-btn-text">Instalar</span>
+          </button>
+          <button type="button" class="action-btn action-btn-secondary" data-action="export-csv"
+            title="Baixar os eventos filtrados em planilha (CSV)" disabled>
+            <span data-stk-icon="fileCsv"></span>
+            <span class="action-btn-text">CSV</span>
+          </button>
+          <div class="action-menu">
+            <button type="button" class="action-btn action-btn-secondary" aria-haspopup="menu" aria-expanded="false" title="Relatório desta tela em PDF ou Excel">
+              <span data-stk-icon="fileUp"></span>
+              <span class="action-btn-text">Relatório</span>
+            </button>
+            <div class="action-menu-list" role="menu">
+              <button type="button" class="action-menu-item" role="menuitem" data-action="relatorio-pdf"><span data-stk-icon="download"></span>PDF (imprimir ou salvar)</button>
+              <button type="button" class="action-menu-item" role="menuitem" data-action="relatorio-xlsx"><span data-stk-icon="fileCsv"></span>Planilha Excel (.xlsx)</button>
+            </div>
+          </div>
+          <div class="action-menu">
+            <button type="button" class="action-btn action-btn-primary" aria-haspopup="menu" aria-expanded="false"
+              title="Compartilhar">
+              <span data-stk-icon="share"></span>
+              <span class="action-btn-text">Compartilhar</span>
+            </button>
+            <div class="action-menu-list" role="menu">
+              <button type="button" class="action-menu-item" role="menuitem" data-action="copy-link"><span
+                  data-stk-icon="link"></span>Copiar link desta urna</button>
+              <button type="button" class="action-menu-item" role="menuitem" data-action="copy-report"><span
+                  data-stk-icon="copy"></span>Copiar resumo da urna</button>
+              <button type="button" class="action-menu-item" role="menuitem" data-action="share-whatsapp"><span
+                  data-stk-icon="whatsapp"></span>Enviar resumo pelo WhatsApp</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- BARRA LATERAL + CONTEÚDO -->
+  <div class="app-main-layout">
+    <div class="sidebar-backdrop" id="sidebarBackdrop" hidden></div>
+
+    <aside class="app-sidebar" id="appSidebar" aria-label="Navegação principal">
+      <div class="sidebar-top-section">
+        <div class="sidebar-drawer-header">
+          <div class="sidebar-drawer-brand">
+            <img class="app-logo app-logo-sm" src="icons/app-icon-64.png" alt="" width="24" height="24">
+            <span>Auditoria das Urnas</span>
+          </div>
+          <button type="button" class="btn-sidebar-close" id="btnCloseSidebar" aria-label="Fechar menu"
+            title="Fechar menu">
+            <span data-stk-icon="close"></span>
+          </button>
+        </div>
+        <div class="sidebar-desktop-header">
+          <span class="sidebar-title-text">Auditoria</span>
+        </div>
+        <nav class="sidebar-nav-list" role="tablist" aria-orientation="vertical" aria-label="Auditoria">
+          <button type="button" class="sidebar-nav-item active" data-tab="tabPanorama" role="tab" aria-selected="true"
+            aria-controls="tabPanorama" title="Panorama do Brasil">
+            <span class="nav-item-inner"><span class="nav-icon"><span data-stk-icon="chartBar"></span></span><span
+                class="nav-label">Panorama do Brasil</span></span>
+          </button>
+          <button type="button" class="sidebar-nav-item" data-tab="tabAbrir" role="tab" aria-selected="false"
+            aria-controls="tabAbrir" tabindex="-1" title="Abrir urna">
+            <span class="nav-item-inner"><span class="nav-icon"><span data-stk-icon="search"></span></span><span
+                class="nav-label">Abrir urna</span></span>
+          </button>
+          <button type="button" class="sidebar-nav-item" data-tab="tabUrna" role="tab" aria-selected="false"
+            aria-controls="tabUrna" tabindex="-1" title="Resumo da urna">
+            <span class="nav-item-inner"><span class="nav-icon"><span data-stk-icon="vote"></span></span><span
+                class="nav-label">Resumo da urna</span></span>
+          </button>
+          <button type="button" class="sidebar-nav-item" data-tab="tabEventos" role="tab" aria-selected="false"
+            aria-controls="tabEventos" tabindex="-1" title="Eventos do log">
+            <span class="nav-item-inner"><span class="nav-icon"><span data-stk-icon="list"></span></span><span
+                class="nav-label">Eventos do log</span></span>
+          </button>
+          <button type="button" class="sidebar-nav-item" data-tab="tabPacote" role="tab" aria-selected="false"
+            aria-controls="tabPacote" tabindex="-1" title="Todas as urnas de uma UF">
+            <span class="nav-item-inner"><span class="nav-icon"><span data-stk-icon="layers"></span></span><span
+                class="nav-label">Urnas de uma UF</span></span>
+          </button>
+          <button type="button" class="sidebar-nav-item" data-tab="tabLocais" role="tab" aria-selected="false"
+            aria-controls="tabLocais" tabindex="-1" title="Locais e zonas">
+            <span class="nav-item-inner"><span class="nav-icon"><span data-stk-icon="globe"></span></span><span
+                class="nav-label">Locais e zonas</span></span>
+          </button>
+          <button type="button" class="sidebar-nav-item" data-tab="tabComoLer" role="tab" aria-selected="false"
+            aria-controls="tabComoLer" tabindex="-1" title="Como ler o log">
+            <span class="nav-item-inner"><span class="nav-icon"><span data-stk-icon="book"></span></span><span
+                class="nav-label">Como ler o log</span></span>
+          </button>
+        </nav>
+        <!-- App irmão: Painel Eleições 2026 (resultados, municípios, mapa). Dentro do site do painel é a pasta de cima. -->
+        <nav class="sidebar-nav-list sidebar-nav-extra" aria-label="Outros apps">
+          <a class="sidebar-nav-item" id="linkPainel" href="https://celsoalmeidalf.github.io/eleicoes-2026/" title="Resultados das eleições: estados, municípios, demografia e mapa">
+            <span class="nav-item-inner"><span class="nav-icon"><span data-stk-icon="chartBar"></span></span><span class="nav-label">Resultados das eleições</span></span>
+          </a>
+        </nav>
+      </div>
+    </aside>
+
+    <div class="app-content-area">
+      <main class="content-wrapper app-main">
+
+        <!-- ABA: PANORAMA (logs de todas as urnas, já conferidos) -->
+        <section class="tab-pane active" id="tabPanorama" role="tabpanel" aria-label="Panorama do Brasil">
+          <div id="panoramaConteudo"></div>
+        </section>
+
+        <!-- ABA: ABRIR URNA -->
+        <section class="tab-pane" id="tabAbrir" role="tabpanel" aria-label="Abrir urna">
+          <div class="intro">
+            <h2>Confira a urna da sua seção</h2>
+            <p>O TSE publica o <strong>log</strong> (o diário de tudo o que a urna fez) e o <strong>boletim de
+                urna</strong> de cada seção. Este app abre esses arquivos, organiza os eventos e confere o log com o
+              boletim. Os arquivos vêm direto do TSE para o seu aparelho; nada é enviado a outro lugar.</p>
+          </div>
+
+          <div class="grade-2">
+            <form class="glass-panel cartao" id="formTse" autocomplete="off">
+              <h3 class="cartao-titulo"><span data-stk-icon="globe"></span>Buscar no site do TSE</h3>
+              <p class="cartao-sub">Escolha a seção. O app baixa o log e o boletim de <span
+                  class="font-mono">resultados.tse.jus.br</span>.</p>
+              <div class="campos">
+                <label class="campo">Turno
+                  <select id="selPleito"></select>
+                </label>
+                <label class="campo">Estado
+                  <select id="selUf">
+                    <option value="">Escolha</option>
+                  </select>
+                </label>
+                <label class="campo campo-largo">Município
+                  <select id="selMunicipio" disabled>
+                    <option value="">Escolha o estado</option>
+                  </select>
+                </label>
+                <label class="campo">Zona
+                  <select id="selZona" disabled>
+                    <option value="">—</option>
+                  </select>
+                </label>
+                <label class="campo">Seção
+                  <select id="selSecao" disabled>
+                    <option value="">—</option>
+                  </select>
+                </label>
+              </div>
+              <button type="submit" class="botao botao-primario" id="btnBuscarTse" disabled><span
+                  data-stk-icon="download"></span>Baixar e abrir</button>
+              <p class="status-linha" id="statusTse" role="status" aria-live="polite"></p>
+            </form>
+
+            <div class="glass-panel cartao">
+              <h3 class="cartao-titulo"><span data-stk-icon="upload"></span>Abrir arquivos do seu computador</h3>
+              <p class="cartao-sub">Log (<span class="font-mono">-log.jez</span> ou <span
+                  class="font-mono">logd.dat</span>), boletim (<span class="font-mono">-bu.dat</span> ou <span
+                  class="font-mono">-imgbu.dat</span>) ou o pacote <span class="font-mono">.zip</span> de uma UF
+                inteira.</p>
+              <label class="zona-soltar" id="zonaSoltar">
+                <input type="file" id="inputArquivos" multiple accept=".jez,.dat,.zip" class="visualmente-oculto">
+                <span data-stk-icon="fileUp" class="zona-icone"></span>
+                <strong>Arraste os arquivos aqui</strong>
+                <span>ou toque para escolher</span>
+              </label>
+              <div class="exemplos">
+                <span>Exemplos reais do 2º turno:</span>
+                <button type="button" class="botao botao-secundario" data-exemplo="rr">Caroebe (RR), seção 11</button>
+                <button type="button" class="botao botao-secundario" data-exemplo="mg">Chapada Gaúcha (MG): troca de
+                  urna</button>
+              </div>
+              <p class="status-linha" id="statusArquivos" role="status" aria-live="polite"></p>
+            </div>
+          </div>
+
+          <div class="glass-panel cartao" id="cartaoAbertas" hidden>
+            <h3 class="cartao-titulo"><span data-stk-icon="vote"></span>Urnas abertas</h3>
+            <ul class="lista-urnas" id="listaAbertas"></ul>
+          </div>
+        </section>
+
+        <!-- ABA: RESUMO DA URNA -->
+        <section class="tab-pane" id="tabUrna" role="tabpanel" aria-label="Resumo da urna">
+          <div class="vazio" id="urnaVazia">
+            <span data-stk-icon="vote"></span>
+            <p>Nenhuma urna aberta ainda.</p>
+            <button type="button" class="botao botao-primario" data-ir="tabAbrir">Abrir urna</button>
+          </div>
+          <div id="urnaConteudo" hidden></div>
+        </section>
+
+        <!-- ABA: EVENTOS -->
+        <section class="tab-pane" id="tabEventos" role="tabpanel" aria-label="Eventos do log">
+          <form class="glass-panel cartao" id="formEventos" autocomplete="off">
+            <h3 class="cartao-titulo"><span data-stk-icon="search"></span>Escolher a urna</h3>
+            <div class="campos campos-linha">
+              <label class="campo">Turno<select id="evPleito"></select></label>
+              <label class="campo">Estado<select id="evUf"><option value="">Escolha</option></select></label>
+              <label class="campo">Município<select id="evMunicipio" disabled><option value="">—</option></select></label>
+              <label class="campo">Zona<select id="evZona" disabled><option value="">—</option></select></label>
+              <label class="campo">Seção<select id="evSecao" disabled><option value="">—</option></select></label>
+              <div class="campo campo-botao"><button type="submit" class="botao botao-primario" id="evBuscar" disabled><span data-stk-icon="download"></span>Carregar log</button></div>
+            </div>
+            <p class="status-linha" id="evStatus" role="status" aria-live="polite"></p>
+          </form>
+          <div class="vazio" id="eventosVazio">
+            <span data-stk-icon="list"></span>
+            <p>Escolha turno, estado, município, zona e seção acima para ver as linhas do log da urna.</p>
+          </div>
+          <div id="eventosConteudo" hidden>
+            <div class="glass-panel cartao filtros">
+              <div class="campos">
+                <label class="campo campo-largo">Buscar no texto
+                  <input type="search" id="filtroTexto" placeholder="ex.: computado, impressora, contingência">
+                </label>
+                <label class="campo">Turno / dia
+                  <select id="filtroDia"></select>
+                </label>
+                <label class="campo">Aplicação
+                  <select id="filtroApp">
+                    <option value="">Todas</option>
+                  </select>
+                </label>
+                <label class="campo">Log
+                  <select id="filtroOrigem">
+                    <option value="urna">Desta urna</option>
+                    <option value="original">Da urna anterior (troca)</option>
+                  </select>
+                </label>
+              </div>
+              <div class="chips" role="group" aria-label="Nível">
+                <button type="button" class="chip ativo" data-nivel="">Todos</button>
+                <button type="button" class="chip" data-nivel="ALERTA">Alertas</button>
+                <button type="button" class="chip" data-nivel="ERRO">Erros</button>
+                <button type="button" class="chip" data-nivel="VOTO">Só votos</button>
+                <button type="button" class="chip" data-nivel="MARCO">Marcos do dia</button>
+              </div>
+              <p class="status-linha" id="contagemEventos"></p>
+            </div>
+            <div class="glass-panel tabela-wrap">
+              <table class="tabela-eventos">
+                <thead>
+                  <tr>
+                    <th>Linha</th>
+                    <th>Hora</th>
+                    <th>Nível</th>
+                    <th>Aplicação</th>
+                    <th>Mensagem</th>
+                  </tr>
+                </thead>
+                <tbody id="corpoEventos"></tbody>
+              </table>
+            </div>
+            <div class="paginacao">
+              <button type="button" class="botao botao-secundario" id="btnMaisEventos">Mostrar mais</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ABA: URNAS DE UMA UF -->
+        <section class="tab-pane" id="tabPacote" role="tabpanel" aria-label="Urnas de uma UF">
+          <div class="intro">
+            <h2>Todas as urnas de um estado</h2>
+            <p>O TSE publica, por estado, um pacote com o log e o boletim de cada urna (dados abertos, conjunto
+              "Arquivos transmitidos para totalização"). Abra o pacote <span
+                class="font-mono">bu_imgbu_logjez_rdv_vscmr_2026_2t_UF.zip</span> na aba <strong>Abrir urna</strong> e
+              confira todas as urnas de uma vez. O pacote é lido aos pedaços, sem carregar tudo na memória.</p>
+            <p><a href="https://dadosabertos.tse.jus.br/dataset/resultados-2026-arquivos-transmitidos-para-totalizacao"
+                target="_blank" rel="noopener noreferrer">Baixar os pacotes no Portal de Dados Abertos do TSE</a></p>
+          </div>
+          <div id="pacoteConteudo"></div>
+        </section>
+
+        <!-- ABA: LOCAIS E ZONAS -->
+        <section class="tab-pane" id="tabLocais" role="tabpanel" aria-label="Locais e zonas">
+          <div id="locaisConteudo"></div>
+        </section>
+
+        <!-- ABA: COMO LER -->
+        <section class="tab-pane" id="tabComoLer" role="tabpanel" aria-label="Como ler o log">
+          <div id="comoLerConteudo"></div>
+        </section>
+      </main>
+
+      <footer class="app-footer gov-footer">
+        <section class="content-wrapper footer-fontes" aria-labelledby="tituloFontes">
+          <h2 id="tituloFontes" class="footer-fontes-titulo"><span data-stk-icon="info"></span>Referências e fontes</h2>
+          <div class="footer-fontes-grid">
+            <div>
+              <h3>Arquivos oficiais</h3>
+              <ul>
+                <li><a href="https://resultados.tse.jus.br/oficial/app/index.html" target="_blank"
+                    rel="noopener noreferrer">TSE, site de Resultados</a>: log, boletim e registro digital do voto de
+                  cada seção.</li>
+                <li><a
+                    href="https://dadosabertos.tse.jus.br/dataset/resultados-2026-arquivos-transmitidos-para-totalizacao"
+                    target="_blank" rel="noopener noreferrer">TSE, Dados Abertos: arquivos transmitidos para
+                    totalização</a>, pacotes por UF.</li>
+                <li><a href="https://dadosabertos.tse.jus.br/dataset/resultados-2026-boletim-de-urna" target="_blank"
+                    rel="noopener noreferrer">TSE, Dados Abertos: boletins de urna</a>, em planilha.</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Para conferir sem este app</h3>
+              <ul>
+                <li>O <span class="font-mono">-log.jez</span> é um ZIP: renomeie para <span
+                    class="font-mono">.zip</span> e abra o <span class="font-mono">logd.dat</span> num editor de texto
+                  (codificação Latin-1).</li>
+                <li>Os números do boletim estão impressos na porta da seção e no QR Code do boletim, lido pelo app
+                  Boletim na Mão, da Justiça Eleitoral (lojas de aplicativos).</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+        <div class="content-wrapper footer-content">
+          <div><strong>Auditoria das Urnas</strong> • Arquivos públicos do TSE, lidos no seu aparelho</div>
+          <div>Desenvolvido por Celso de Almeida Leite (Systekna) • Outubro de 2026</div>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <!-- CELULAR: barra de abas fixa embaixo -->
+  <nav class="app-bottom-nav" id="appBottomNav" aria-label="Navegação principal">
+    <button type="button" class="bottom-nav-item active" data-tab="tabPanorama" aria-current="page">
+      <span><span data-stk-icon="chartBar"></span></span><span class="bottom-nav-label">Brasil</span>
+    </button>
+    <button type="button" class="bottom-nav-item" data-tab="tabAbrir">
+      <span><span data-stk-icon="search"></span></span><span class="bottom-nav-label">Abrir</span>
+    </button>
+    <button type="button" class="bottom-nav-item" data-tab="tabUrna">
+      <span><span data-stk-icon="vote"></span></span><span class="bottom-nav-label">Urna</span>
+    </button>
+    <button type="button" class="bottom-nav-item" data-tab="tabEventos">
+      <span><span data-stk-icon="list"></span></span><span class="bottom-nav-label">Eventos</span>
+    </button>
+    <button type="button" class="bottom-nav-item" data-tab="tabLocais">
+      <span><span data-stk-icon="globe"></span></span><span class="bottom-nav-label">Locais</span>
+    </button>
+    <button type="button" class="bottom-nav-item" data-tab="tabComoLer" hidden>
+      <span><span data-stk-icon="book"></span></span><span class="bottom-nav-label">Guia</span>
+    </button>
+  </nav>
+
+  <div class="stk-toast" id="toastNotification" role="status" aria-live="polite">
+    <div class="toast-icon" data-stk-icon="check"></div>
+    <div id="toastMessage"></div>
+  </div>
+
+  <script type="module" src="src/Program.js?v=20261029-1725"></script>
+</body>
+
+</html>

@@ -1,0 +1,13 @@
+{
+  "name": "stk-governo-auditoria-urnas",
+  "private": true,
+  "description": "Auditoria das Urnas (8.3. AUDITORIA-URNAS): logs e boletins das urnas de 2026, sem dependências npm",
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/",
+    "test:ui": "node --experimental-websocket tests/ui_smoke.mjs",
+    "versionar": "node scripts/versionar.mjs",
+    "conferir-pacote": "node scripts/conferir_pacote.mjs",
+    "design-system": "node ../_design-system/sync.mjs --verificar"
+  }
+}

@@ -1,0 +1,6 @@
+# Pacotes do TSE baixados para o Panorama (apagados depois de conferidos)
+data/download/
+# Uma linha por urna, para trabalho local (grande; o site usa data/panorama/brasil.json)
+data/panorama/csv/
+# Registros das execuções
+data/*.log
